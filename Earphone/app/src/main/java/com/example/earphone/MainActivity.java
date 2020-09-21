@@ -139,8 +139,9 @@ public class MainActivity extends AppCompatActivity {
         if (volume > 0 && volume < 1000000) {
             db = 20 * (float)(Math.log10(volume));  //파형을 데시벨로 변환
         }
-        return db;
+        return db; //데시벨 리턴
     }
+
     public double getAmplitude() { // 미디어 레코드의 getMaxamplitude는 녹음 파일중 최대 진폭 double로 반환
         if (mRecorder != null)
             return  (mRecorder.getMaxAmplitude()/32767);
