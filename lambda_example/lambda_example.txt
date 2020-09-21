@@ -1,0 +1,57 @@
+import json
+import boto3
+from PIL import Image
+from keras.models import load_model
+import numpy as np
+
+BUCKET_NAME = 'hotsix-smartfarm'
+ACCESS_KEY = 'AKIA5PJP5IRPYXVGWWWS'
+SECRET_KEY = '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'
+result=''
+file_name=''
+
+
+def lambda_handler(event, context):
+    
+
+    file_name = event['imgName']
+    
+    
+    downloadFromS3(BUCKET_NAME, 'image/'+file_name, '/tmp/'+file_name)
+    downloadFromS3(BUCKET_NAME, 'deep/fire_detection_images_classification.model', '/tmp/fire_detection_images_classification.model')
+    
+    img = Image.open('/tmp/'+file_name)
+    img = img.convert('RGB') 
+    img = img.resize((128, 128))
+    X = np.asarray(img) 
+    X = X.astype(float) / 255
+    X = X.reshape(-1, 128, 128, 3)
+    
+    model = load_model('/tmp/fire_detection_images_classification.model')
+    prediction = model.predict(X)
+
+    if prediction[0][0] >= 0.9 :
+        result='fire'
+        print('fire')
+    else :
+        result='non fire'
+        print('non fire')
+
+    
+    
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'body': json.dumps(result)
+    }
+    
+    
+    
+def downloadFromS3(strBucket, s3_path, local_path):
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=ACCESS_KEY,
+        aws_secret_access_key = SECRET_KEY,
+    )
+    
+    s3_client.download_file(strBucket, s3_path, local_path)
