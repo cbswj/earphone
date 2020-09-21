@@ -1,11 +1,16 @@
 package com.example.earphone;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,15 +19,14 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mStatusView;
+    private TextView mStatusView; //x
     private MediaRecorder mRecorder;
     private Thread runner;
     private double volume = 10000;
     private double db=0;
-    private Button start;
-    private Button stop;
-    private static double mEMA = 0.0;
-    static final private double EMA_FILTER = 0.6;
+
+    private static double mEMA = 0.0; //x
+    static final private double EMA_FILTER = 0.6; //x
 
     final Runnable updater = new Runnable(){
 
@@ -42,22 +46,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mStatusView =(TextView) findViewById(R.id.tv);
-        start = (Button)findViewById(R.id.btn1);
-        stop = (Button)findViewById(R.id.btn2);
 
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override //서비스 실행
-            public void onClick(View view) {
-                startService(new Intent(getApplicationContext(),Earphone_Service.class));
-            }
-        });
+        checkSelfPermission();
 
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override //서비스 종료
-            public void onClick(View view) {
-                startService(new Intent(getApplicationContext(),Earphone_Service.class));
-            }
-        });
+
+
 
         if (runner == null)
         {
@@ -127,12 +120,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTv(){
         mStatusView.setText(Double.toString((getDb())) + " dB");
-    }
+    } //x
 
 
     public double soundDb(double ampl){ //데시벨 구하는 로직 이상해서 버림
         return  20 * Math.log10(getAmplitudeEMA() / ampl);
-    }
+    } //x
 
     public double getDb() { //쓰레드는 그대로 쓰고 메소드부분만 다른거로 바꿈
         volume = mRecorder.getMaxAmplitude();
@@ -149,9 +142,46 @@ public class MainActivity extends AppCompatActivity {
             return 0;
 
     }
+
+
     public double getAmplitudeEMA() { //이건 진짜 모르겠음 안되서 이것도 안씀
         double amp =  getAmplitude();
         mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
         return mEMA;
     }
+
+
+    // 현재 권한이 있는지를 체크하고 없으면 권한을 요청하는 event
+    public void checkSelfPermission() {
+        String temp = "";
+
+        //파일 읽기 권한 확인
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " ";
+        }
+
+        //파일 쓰기 권한 확인
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " ";
+        }
+
+        //파일 쓰기 권한 확인
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.RECORD_AUDIO + " ";
+        }
+
+
+        // 한꺼번에 문자열에 담은 권한들을 요청함함
+        if (TextUtils.isEmpty(temp) == false) {
+            // 권한 요청
+            ActivityCompat.requestPermissions(this, temp.trim().split(" "),1);
+        }else {
+            // 모두 허용 상태
+
+        }
+    }
+
 }
