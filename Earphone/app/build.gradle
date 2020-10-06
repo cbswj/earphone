@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.example.earphone"
+        applicationId "mondo.earphone"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
@@ -29,5 +29,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.13.5'  // android에서 접근하기 위한 tool
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.13.5'  // AWS 자격 증명 제공
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.13.5'      // AWS s3 서비스 접근
 
 }
