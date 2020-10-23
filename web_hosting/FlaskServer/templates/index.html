@@ -1,0 +1,85 @@
+
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    {{ JSGlue.include() }}
+    <meta charset="utf-8">
+    <title>JavaScript</title>
+  </head>
+  <body>
+
+<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-database.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+
+<script>
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAWJdB9cR9Ao1h-yDEj7kKFp-2dQtgqB8o",
+    authDomain: "earphone-5d996.firebaseapp.com",
+    databaseURL: "https://earphone-5d996.firebaseio.com",
+    projectId: "earphone-5d996",
+    storageBucket: "earphone-5d996.appspot.com",
+    messagingSenderId: "703763634836",
+    appId: "1:703763634836:web:f6dc8c8c9356687b9cf281",
+    measurementId: "G-S31F3RRC7C"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+
+
+    var database = firebase.database();
+    var check =1;
+
+	var testref = firebase.database().ref('/UID/');
+testref.on('value', function(snapshot)  {
+
+  if(check >1){
+
+
+    var temp=snapshot.val();
+
+
+    var uid = {
+       'uid': temp
+
+       }
+
+$.ajax({
+url: Flask.url_for('background_process_test'),
+type: 'POST',
+ contentType: 'application/json;charset=UTF-8',
+data: JSON.stringify(uid),   // converts js value to JSON string
+})
+.done(function(result){     // on success get the return object from server
+       console.log(result)     // do whatever with it. In this case see it in console
+})
+
+
+  }
+  check++;
+
+
+
+});
+
+
+</script>
+<!--<form method=get action="/background_process_test" name="frm">-->
+<!--<input type="hidden" name="uid" value="&{uid};%">-->
+<!--</form>-->
+  </body>
+</html>
+

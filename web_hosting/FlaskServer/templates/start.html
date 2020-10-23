@@ -1,0 +1,90 @@
+
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title>JavaScript</title>
+  </head>
+  <body>
+  	    <p>
+		<button type="button" onclick="button1_click();">test </button>
+		</p>
+
+
+<!--
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type=text/javascript>
+        $(function() {
+          $('a#test').bind('click', function() {
+            $.getJSON('/background_process_test',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+-->
+
+<!--<div class='container'>
+    <h3>Test</h3>
+        <form>
+            <a href=# id=test><button class='btn btn-default'>Test</button></a>
+        </form>
+
+</div>-->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-database.js"></script>
+
+<script>
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAWJdB9cR9Ao1h-yDEj7kKFp-2dQtgqB8o",
+    authDomain: "earphone-5d996.firebaseapp.com",
+    databaseURL: "https://earphone-5d996.firebaseio.com",
+    projectId: "earphone-5d996",
+    storageBucket: "earphone-5d996.appspot.com",
+    messagingSenderId: "703763634836",
+    appId: "1:703763634836:web:f6dc8c8c9356687b9cf281",
+    measurementId: "G-S31F3RRC7C"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+
+  		 var jbFunction = function() {
+        document.write( '<p>start</p>' );
+      };
+
+
+
+
+    var database = firebase.database();
+
+ function button1_click() {
+	database.ref('/UID/').set({
+			name: 'message'
+		});
+}
+	jbFunction();
+
+
+
+
+
+
+
+</script>
+
+  </body>
+</html>
+
