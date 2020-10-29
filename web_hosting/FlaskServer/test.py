@@ -92,8 +92,12 @@ def output(filenames):
 
     np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
     cls = ['car_horn', 'engine_idling', 'siren','mute']
+    result=[]
     for i in range(0, 4):
         print(cls[i] + ' :' + str(round(train[i] * 100, 4)))
+        result.append(round(train[i] * 100, 4))
+    if(max(result) <90):
+        return 3
 
 
     return (model.predict_classes(X))  # 불러온 모델로 테스트 실행

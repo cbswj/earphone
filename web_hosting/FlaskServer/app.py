@@ -25,8 +25,6 @@ def background_process_test():
         data =request.json['uid']
         if data ==None:
             return render_template('index.html')
-
-        print(data)
         uid =list(data.keys())[0]
 
 
@@ -41,8 +39,12 @@ def background_process_test():
     test.downloadFromS3('wav-earphone', "wavfile/"+name, 'test.wav')
 
     pr =test.output(["test.wav"]) ##다운 받은 파일로 러닝 돌리기
-    print(pr[0][0])
-    test.setdata(str(pr[0][0]),uid) ## 러닝 결과 데베에 올리기
+    if pr==3:
+        test.setdata(str(pr), uid)  ## 러닝 결과 데베에 올리기
+
+
+    else:
+        test.setdata(str(pr[0][0]),uid) ## 러닝 결과 데베에 올리기
 
     return render_template('index.html')
 
@@ -50,4 +52,4 @@ def background_process_test():
 if __name__ == "__main__":
     app.run(debug=True)
 
-##  0 경적 1엔진 2사이렌
+##  0 경적 1엔진 2사이렌 3 조용
